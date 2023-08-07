@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        body {
+            background-color: #ffffff;
+            animation: changeBackground 10s infinite;
+        }
+
+        @keyframes changeBackground {
+            0% { background-color: #ff0000; }
+            25% { background-color: #00ff00; }
+            50% { background-color: #0000ff; }
+            75% { background-color: #ffff00; }
+            100% { background-color: #ff00ff; }
+        }
+
+        .follower-card {
+            display: inline-block;
+            width: 200px;
+            height: 120px;
+            background-color: {% if follower.color %}{{ follower.color }}{% else %}#ffffff{% endif %};
+            border: 1px solid #000000;
+            border-radius: 10px;
+            padding: 10px;
+            margin: 10px;
+        }
+
+        .follower-card img {
+            float: right;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+        }
+
+        .follower-card .stats {
+            text-align: center;
+            font-size: 24px;
+        }
+
+        .follower-card .stats p {
+            margin: 5px 0;
+        }
+
+        .search-box {
+            text-align: center;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="search-box">
+        <input type="text" id="search-input" placeholder="Search followers..." onkeyup="searchFollowers()">
+    </div>
+
+    {% for follower in following_info %}
+    <div class="follower-card">
+        <imgsrc="{{ follower.avatar_url }}" alt="Profile Picture">
+        <div class="stats">
+            <p>Followers: {{ follower.followers }}</p>
+            <p>Following: {{ follower.following }}</p>
+            <p style="font-size: 36px;">{{ follower.repos }}</p>
+            <p>Follow Date: {% if follower.follow_date %}{{ follower.follow_date }}{% else %}N/A{% endif %}</p>
+        </div>
+    </div>
+    {% endfor %}
+
+    <script>
+        function searchFollowers() {
+            var input, filter, followers, follower, i, txtValue;
+            input = document.getElementById('search-input');
+            filter = input.value.toUpperCase();
+            followers = document.getElementsByClassName('follower-card');
+
+            for (i = 0; i < followers.length; i++) {
+                follower = followers[i];
+                txtValue = follower.innerText || follower.textContent;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    follower.style.display = '';
+                } else {
+                    follower.style.display = 'none';
+                }
+            }
+        }
+    </script>
+</body>
+</html>
